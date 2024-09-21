@@ -253,7 +253,10 @@ namespace GameEngine
 			D3D12Mesh d3d12Mesh = *reinterpret_cast<D3D12Mesh*>(mesh.get());
 			D3D12Material d3d12Material = *reinterpret_cast<D3D12Material*>(material.get());
 
-			float mTheta = 1.5f * DirectX::XM_PI;
+			static auto start_time = std::chrono::system_clock::now().time_since_epoch();
+			float rotation_speed = 0.0001f;
+			float time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch() - start_time).count();
+			float mTheta = rotation_speed * time * 2.0f * DirectX::XM_PI;
 			float mPhi = DirectX::XM_PIDIV4;
 			float mRadius = 5.0f;
 
