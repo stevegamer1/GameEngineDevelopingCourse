@@ -20,6 +20,7 @@ namespace GameEngine
 	public:
 		void Run();
 		void Update(float dt);
+		std::unique_ptr<Render::RenderThread> m_renderThread;
 
 	private:
 		// The main idea behind having this functor is to abstract the common code from the platfrom-specific code
@@ -27,7 +28,7 @@ namespace GameEngine
 
 	private:
 		Core::Timer m_GameTimer;
-		std::unique_ptr<Render::RenderThread> m_renderThread;
 		std::vector<GameObject*> m_Objects;
+		std::vector<std::function<void(Game&, GameObject&, float)>> m_Systems;
 	};
 }

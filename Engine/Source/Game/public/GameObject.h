@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Components.h>
 #include <RenderObject.h>
 #include <RenderThread.h>
 #include <Vector.h>
@@ -29,6 +30,8 @@ namespace GameEngine
 			return m_Position;
 		}
 
+		// I think this should be public:
+		std::vector<Component*> components;
 	protected:
 		Render::RenderObject* m_RenderObject = nullptr;
 
