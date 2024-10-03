@@ -5,7 +5,7 @@
 namespace GameEngine {
 	// Base of all components.
 	struct Component {
-		virtual void useless(){}  // Polymorphic type.
+		virtual ~Component(){}
 	};
 
 	// Move back and forth.

@@ -46,7 +46,7 @@ namespace GameEngine
 
 		// Movement system.
 		m_Systems.push_back([](Game& game, GameObject& obj,  float dt) {
-			for (auto comp : obj.components) {
+			for (const auto& comp : obj.components) {
 				MovementComponent* movement = dynamic_cast<MovementComponent*>(comp);
 				if (movement != nullptr) {
 					obj.SetPosition(obj.GetPosition() + movement->velocity * dt, game.m_renderThread->GetMainFrame());
@@ -64,7 +64,7 @@ namespace GameEngine
 
 		// Physics system.
 		m_Systems.push_back([](Game& game, GameObject& obj, float dt) {
-			for (auto comp : obj.components) {
+			for (const auto& comp : obj.components) {
 				PhysicsComponent* physics = dynamic_cast<PhysicsComponent*>(comp);
 				if (physics != nullptr) {
 					Math::Vector3 gravity = Math::Vector3f(0.0f, -2.0f, 0.0f);
@@ -89,7 +89,7 @@ namespace GameEngine
 
 		// Controlled movement system.
 		m_Systems.push_back([](Game& game, GameObject& obj, float dt) {
-			for (auto comp : obj.components) {
+			for (const auto& comp : obj.components) {
 				ControllableComponent* control = dynamic_cast<ControllableComponent*>(comp);
 				if (control != nullptr) {
 					obj.SetPosition(obj.GetPosition() + control->accumulatedInput * dt, game.m_renderThread->GetMainFrame());
@@ -131,8 +131,8 @@ namespace GameEngine
 
 	void Game::Update(float dt)
 	{
-		for (auto sys : m_Systems) {
-			for (auto obj : m_Objects) {
+		for (const auto& sys : m_Systems) {
+			for (const auto& obj : m_Objects) {
 				sys(*this, *obj, dt);
 			}
 		}
