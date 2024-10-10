@@ -37,6 +37,16 @@ void GameFramework::Init()
 		.set(GeometryPtr{ RenderCore::DefaultGeometry::Cube() })
 		.set(RenderObjectPtr{ new Render::RenderObject() });
 
+	flecs::entity cubeKillable = m_World.entity()
+		.set(Position{ Math::Vector3f(6.f, 0.f, 0.f) })
+		.set(Velocity{ Math::Vector3f(0.f, 3.f, 0.f) })
+		.set(Gravity{ Math::Vector3f(0.f, -9.8065f, 0.f) })
+		.set(BouncePlane{ Math::Vector4f(0.f, 1.f, 0.f, 5.f) })
+		.set(Bounciness{ 1.f })
+		//.set(KilledOnTouch{})
+		.set(GeometryPtr{ RenderCore::DefaultGeometry::Cube() })
+		.set(RenderObjectPtr{ new Render::RenderObject() });
+
 	flecs::entity camera = m_World.entity()
 		.set(Position{ Math::Vector3f(0.0f, 12.0f, -10.0f) })
 		.set(Speed{ 10.f })

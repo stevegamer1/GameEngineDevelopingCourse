@@ -1,5 +1,7 @@
 #include <ecsPhys.h>
+#include <ecsMesh.h>
 #include <flecs.h>
+#include <RenderObject.h>
 
 namespace
 {
@@ -29,7 +31,7 @@ void RegisterEcsPhysSystems(flecs::world& world)
 
 
 	world.system<Velocity, Position, const BouncePlane, const Bounciness>()
-		.each([&](Velocity& vel, Position& pos, const BouncePlane& plane, const Bounciness& bounciness)
+		.each([&](flecs::entity e, Velocity& vel, Position& pos, const BouncePlane& plane, const Bounciness& bounciness)
 	{
 		float dotPos = plane.value.x * pos.value.x + plane.value.y * pos.value.y + plane.value.z * pos.value.z;
 		float dotVel = plane.value.x * vel.value.x + plane.value.y * vel.value.y + plane.value.z * vel.value.z;
@@ -42,6 +44,10 @@ void RegisterEcsPhysSystems(flecs::world& world)
 			vel.value.x -= (1.f + bounciness.value) * plane.value.x * dotVel;
 			vel.value.y -= (1.f + bounciness.value) * plane.value.y * dotVel;
 			vel.value.z -= (1.f + bounciness.value) * plane.value.z * dotVel;
+
+			if (e.has<DieOnTimerAfterBounce>()) {
+				e.get_mut<DieOnTimerAfterBounce>()->timer.Start();
+			}
 		}
 	});
 
@@ -70,5 +76,25 @@ void RegisterEcsPhysSystems(flecs::world& world)
 		pos.value.x += rand_flt(-shiver.value, shiver.value);
 		pos.value.y += rand_flt(-shiver.value, shiver.value);
 		pos.value.z += rand_flt(-shiver.value, shiver.value);
+	});
+
+	world.system<DieOnTimerAfterBounce>()
+		.each([](flecs::entity e, DieOnTimerAfterBounce& dieOnTimer) {
+		dieOnTimer.timer.Tick();
+		if (dieOnTimer.timer.GetTotalTime() > dieOnTimer.death_time) {
+			if (e.has<Position>()) {
+				e.get_mut<Position>()->value = GameEngine::Math::Vector3f(10000.0f, 10000.0f, 10000.0f);
+			}
+		}
+	});
+
+	world.system<const KillOnTouch, const GeometryPtr, const Position>()
+		.each([&world](flecs::entity e, const KillOnTouch&, const GeometryPtr&, const Position& pos) {
+		/*world.each<KilledOnTouch>([&e, &pos](flecs::entity e2, KilledOnTouch) {
+			if (e2.has<Position>() &&
+				(e2.get_mut<Position>()->value - pos.value).GetLength() < 0.5f) {
+				e2.get_mut<Position>()->value = GameEngine::Math::Vector3f(10000.0f, 10000.0f, 10000.0f);
+			}
+		});*/
 	});
 }

@@ -29,3 +29,5 @@ include_directories(${PROJECT_BINARY_DIR}/Source)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/../../Engine/ Engine)
 add_subdirectory(Source)
+
+add_compile_options(Ehsc)
