@@ -43,7 +43,7 @@ void GameFramework::Init()
 		.set(Gravity{ Math::Vector3f(0.f, -9.8065f, 0.f) })
 		.set(BouncePlane{ Math::Vector4f(0.f, 1.f, 0.f, 5.f) })
 		.set(Bounciness{ 1.f })
-		//.set(KilledOnTouch{})
+		.set(KilledOnTouch{})
 		.set(GeometryPtr{ RenderCore::DefaultGeometry::Cube() })
 		.set(RenderObjectPtr{ new Render::RenderObject() });
 

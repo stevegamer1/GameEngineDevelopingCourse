@@ -68,6 +68,7 @@ void RegisterEcsControlSystems(flecs::world& world)
 				.set(DieOnTimerAfterBounce{ dieTimer, 5.0f })
 				.set(BouncePlane{ Math::Vector4f(0.f, 1.f, 0.f, 5.f) })
 				.set(Bounciness{ 1.f })
+				.set(KillOnTouch{})
 				.set(GeometryPtr{ RenderCore::DefaultGeometry::Cube() })
 				.set(RenderObjectPtr{ new Render::RenderObject() });
 		}

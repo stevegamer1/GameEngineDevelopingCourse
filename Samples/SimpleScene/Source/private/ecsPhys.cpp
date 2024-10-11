@@ -46,6 +46,7 @@ void RegisterEcsPhysSystems(flecs::world& world)
 			vel.value.z -= (1.f + bounciness.value) * plane.value.z * dotVel;
 
 			if (e.has<DieOnTimerAfterBounce>()) {
+				e.get_mut<DieOnTimerAfterBounce>()->timer.Reset();
 				e.get_mut<DieOnTimerAfterBounce>()->timer.Start();
 			}
 		}
@@ -90,11 +91,11 @@ void RegisterEcsPhysSystems(flecs::world& world)
 
 	world.system<const KillOnTouch, const GeometryPtr, const Position>()
 		.each([&world](flecs::entity e, const KillOnTouch&, const GeometryPtr&, const Position& pos) {
-		/*world.each<KilledOnTouch>([&e, &pos](flecs::entity e2, KilledOnTouch) {
+		world.each<KilledOnTouch>([&e, &pos](flecs::entity e2, KilledOnTouch) {
 			if (e2.has<Position>() &&
-				(e2.get_mut<Position>()->value - pos.value).GetLength() < 0.5f) {
+				(e2.get_mut<Position>()->value - pos.value).GetLength() < 100000.0f) {
 				e2.get_mut<Position>()->value = GameEngine::Math::Vector3f(10000.0f, 10000.0f, 10000.0f);
 			}
-		});*/
+		});
 	});
 }
