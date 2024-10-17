@@ -60,9 +60,51 @@ local function BounceSystem(it)
     end
 end
 
+
+local function DestructionOnTimer(it)
+	for pos, timer in ecs.each(it) do
+		timer.timeLeft = timer.timeLeft - it.delta_time
+		if timer.timeLeft <= 0.0 then
+			pos.x = 10000.0
+			pos.y = 10000.0
+			pos.z = 10000.0
+		end
+	end
+end
+
+
+local function Check1DLineIntersection(a1, b1, a2, b2)
+	return (a1 <= b2) and (b1 <= a2)
+end
+
+
+local function CheckCuboidIntersection(pos1, collider1, pos2, collider2)
+	checkX = Check1DLineIntersection(pos1.x - collider1.extentX, pos1.x + collider1.extentX, pos2.x - collider2.extentX, pos2.x + collider2.extentX)
+	checkY = Check1DLineIntersection(pos1.y - collider1.extentY, pos1.y + collider1.extentY, pos2.y - collider2.extentY, pos2.y + collider2.extentY)
+	checkZ = Check1DLineIntersection(pos1.z - collider1.extentZ, pos1.z + collider1.extentZ, pos2.z - collider2.extentZ, pos2.z + collider2.extentZ)
+	return checkX and checkY and checkZ
+end
+
+
+local function KillOnCollision(it)
+	for pos1, collider1, killOnCollision in ecs.each(it) do
+		local q = ecs.query("Position, Collider, DieOnCollision")
+		local it = ecs.query_iter(q)
+		for pos2, collider2, dieOnCollision in ecs.each(it) do
+			if CheckCuboidIntersection(pos1, collider1, pos2, collider2) then
+				pos2.x = 10000.0
+				pos2.y = 10000.0
+				pos2.z = 10000.0
+			end
+		end
+	end
+end
+
+
 ecs.system(move, "Move", ecs.OnUpdate, "Position, Velocity")
 ecs.system(gravity, "grav", ecs.OnUpdate, "Position, Velocity, Gravity, BouncePlane")
 ecs.system(FrictionSystem, "FrictionSystem", ecs.OnUpdate, "Velocity, FrictionAmount")
 ecs.system(ShiverSystem, "ShiverSystem", ecs.OnUpdate, "Position, ShiverAmount")
 ecs.system(BounceSystem, "BounceSystem", ecs.OnUpdate, "Position, Velocity, BouncePlane, Bounciness")
-
+ecs.system(DestructionOnTimer, "DestructionOnTimerSystem", ecs.OnUpdate, "Position, DestructionTimer")
+ecs.system(KillerOnCollision, "DeathOnCollisionSystem", ecs.OnUpdate, "Position, Collider, KillOnCollision")

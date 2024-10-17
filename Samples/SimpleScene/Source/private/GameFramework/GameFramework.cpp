@@ -39,6 +39,8 @@ void GameFramework::Init()
 		.set(Gravity{ 0.f, -9.8065f, 0.f })
 		.set(BouncePlane{ 0.f, 1.f, 0.f, 5.f })
 		.set(Bounciness{ 1.f })
+		.set(Collider{ 0.5, 0.5, 0.5 })
+		.set(DieOnCollision{true})
 		.set(EntitySystem::ECS::GeometryPtr{ RenderCore::DefaultGeometry::Cube() })
 		.set(EntitySystem::ECS::RenderObjectPtr{ new Render::RenderObject() });
 
@@ -60,12 +62,35 @@ void GameFramework::RegisterComponents()
 	ECS_META_COMPONENT(m_World, ShiverAmount);
 	ECS_META_COMPONENT(m_World, FrictionAmount);
 	ECS_META_COMPONENT(m_World, Speed);
+	ECS_META_COMPONENT(m_World, DestructionTimer);
+	ECS_META_COMPONENT(m_World, Collider);
+	ECS_META_COMPONENT(m_World, KillOnCollision);
+	ECS_META_COMPONENT(m_World, DieOnCollision);
 }
 
 void GameFramework::RegisterSystems()
 {
 	RegisterEcsMeshSystems(m_World);
 	RegisterEcsControlSystems(m_World);
+
+	m_World.system<const Position, const CameraPtr, const ControllerPtr>()
+		.each([&](const Position& position, const CameraPtr& cameraPtr, const ControllerPtr& controller)
+			{
+				if (controller.ptr->IsPressed("Shoot")) {
+					Math::Vector3 velocity = cameraPtr.ptr->GetViewDir() * 4.0f;
+					m_World.entity()
+						.set(Position{ position })
+						.set(Velocity{ velocity.x, velocity.y, velocity.z })
+						.set(Gravity{ 0.f, -9.8065f, 0.f })
+						.set(BouncePlane{ 0.f, 1.f, 0.f, 5.f })
+						.set(Bounciness{ 0.2f })
+						.set(DestructionTimer{ 10.0f })
+						.set(Collider{0.5, 0.5, 0.5})
+						.set(KillOnCollision{true})
+						.set(EntitySystem::ECS::GeometryPtr{ RenderCore::DefaultGeometry::Cube() })
+						.set(EntitySystem::ECS::RenderObjectPtr{ new Render::RenderObject() });
+				}
+			});
 }
 
 void GameFramework::Update(float dt)

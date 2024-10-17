@@ -58,3 +58,24 @@ ECS_STRUCT(Speed,
 	float value;
 });
 
+ECS_STRUCT(DestructionTimer,
+{
+	float timeLeft;
+});
+
+ECS_STRUCT(Collider,
+{
+	float extentX;
+	float extentY;
+	float extentZ;
+});
+
+ECS_STRUCT(DieOnCollision,
+{
+	bool useless;
+});
+
+ECS_STRUCT(KillOnCollision,
+{
+	bool useless;
+});
