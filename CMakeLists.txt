@@ -19,3 +19,4 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/localBuild/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/localBuild/bin)
 
 add_subdirectory(Engine)
+add_compile_options(Ehsc)
