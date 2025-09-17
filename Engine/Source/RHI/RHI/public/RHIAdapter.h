@@ -28,11 +28,7 @@ namespace GameEngine
 			virtual void Init() = 0;
 			virtual void Update(Mesh::Ptr mesh, Material::Ptr material) = 0;
 			virtual Mesh::Ptr CreateBoxMesh() = 0;
-<<<<<<< HEAD
 			virtual Mesh::Ptr CreateSpiderMesh() = 0;
-=======
-			virtual Mesh::Ptr CreatePyramidMesh() = 0;
->>>>>>> bc7185de889fae0a1f6726b52a3dd4e2d783c1aa
 			virtual Material::Ptr GetMaterial(const std::string& name) = 0;
 			virtual void ExecuteCommandLists() = 0;
 			virtual void Flush() = 0;
