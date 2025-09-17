@@ -49,6 +49,15 @@ namespace GameEngine::Core
 				return result;
 			}
 
+			inline Vector3<T> operator+(Vector3<T> other)
+			{
+			  Vector3<T> result;
+			  result.x = x + other.x;
+			  result.y = y + other.y;
+			  result.z = z + other.z;
+			  return result;
+			}
+
 			inline Vector3<T> operator-(Vector3<T> other)
 			{
 				Vector3<T> result;
@@ -70,6 +79,15 @@ namespace GameEngine::Core
 			inline float operator*(Vector3<T> other)
 			{
 				return x * other.x + y * other.y + z * other.z;
+			}
+
+			inline Vector3<T> operator*(T scalar)
+			{
+			  Vector3<T> result;
+			  result.x = x * scalar;
+			  result.y = y * scalar;
+			  result.z = z * scalar;
+			  return result;
 			}
 
 			inline Vector3<T> CrossProduct(Vector3<T> other) const

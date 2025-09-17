@@ -1,3 +1,4 @@
+#include <chrono>
 #include <D3D12Mesh.h>
 #include <D3D12Material.h>
 #include <D3D12RHIPrivate.h>
@@ -253,7 +254,11 @@ namespace GameEngine
 			D3D12Mesh d3d12Mesh = *reinterpret_cast<D3D12Mesh*>(mesh.get());
 			D3D12Material d3d12Material = *reinterpret_cast<D3D12Material*>(material.get());
 
-			float mTheta = 1.5f * DirectX::XM_PI;
+			static std::chrono::duration startup = std::chrono::steady_clock::now().time_since_epoch();
+			std::chrono::duration since_startup = std::chrono::steady_clock::now().time_since_epoch() - startup;
+			float phase = std::chrono::duration_cast<std::chrono::milliseconds>(since_startup).count() * 0.001f;
+
+			float mTheta = 1.5f * DirectX::XM_PI + phase;
 			float mPhi = DirectX::XM_PIDIV4;
 			float mRadius = 5.0f;
 

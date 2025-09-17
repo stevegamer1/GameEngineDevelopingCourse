@@ -1,7 +1,9 @@
 #pragma once
 
+#include <array>
 #include <RHIAdapter.h>
 #include <RHI/Direct3D12RHI/export.h>
+#include <Math/Vector.h>
 #include <Mesh.h>
 
 namespace GameEngine
@@ -22,6 +24,7 @@ namespace GameEngine
 			virtual void Init() override;
 			virtual void Update(Mesh::Ptr mesh, Material::Ptr material) override;
 			virtual Mesh::Ptr CreateBoxMesh() override;
+			virtual Mesh::Ptr CreateSpiderMesh() override;
 			virtual Material::Ptr GetMaterial(const std::string& name) override;
 			virtual void ExecuteCommandLists() override;
 			virtual void Flush() override;
@@ -29,6 +32,9 @@ namespace GameEngine
 
 		private:
 			std::shared_ptr<D3D12RHIPrivate> m_d3d12Private = nullptr;
+
+			Core::Math::Vector3f FindKnee(Core::Math::Vector3f shoulder, Core::Math::Vector3f foot, float elbow_length);
+			std::array<Core::Math::Vector3f, 3> MakeKneeRing(Core::Math::Vector3f shoulder, Core::Math::Vector3f knee, Core::Math::Vector3f foot, float radius);
 		};
 	}
 }
