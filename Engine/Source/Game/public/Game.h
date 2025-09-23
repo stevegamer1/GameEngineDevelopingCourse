@@ -1,8 +1,10 @@
 #pragma once
 
+#include <map>
 #include <RenderEngine.h>
 #include <RenderThread.h>
 #include <Timer.h>
+#include <Window/KeyListenersKeeper.h>
 #include <Window/IWindow.h>
 
 namespace GameEngine
@@ -29,5 +31,7 @@ namespace GameEngine
 		Core::Timer m_GameTimer;
 		std::unique_ptr<Render::RenderThread> m_renderThread;
 		std::vector<GameObject*> m_Objects;
+
+		std::unordered_map<Core::KeyListenersKeeper::Key, bool> is_key_pressed;
 	};
 }

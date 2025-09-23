@@ -14,6 +14,15 @@ namespace GameEngine
 		Core::g_MainCamera->SetPosition(Math::Vector3f(0.0f, 6.0f, -6.0f));
 		Core::g_MainCamera->SetViewDir(Math::Vector3f(0.0f, -6.0f, 6.0f).Normalized());
 
+		// When the user minimizes the window, the keys stay "pressed", but fixing this would require catching window minimization.
+		using Key = Core::KeyListenersKeeper::Key;
+		Core::KeyListenersKeeper::AddKeyDownListener([this](Key key){
+			this->is_key_pressed[key] = true;
+		});
+		Core::KeyListenersKeeper::AddKeyUpListener([this](Key key){
+			this->is_key_pressed[key] = false;
+		});
+
 		m_renderThread = std::make_unique<Render::RenderThread>();
 
 		// How many objects do we want to create
@@ -68,5 +77,37 @@ namespace GameEngine
 			}
 			m_Objects[i]->SetPosition(pos, m_renderThread->GetMainFrame());
 		}
+
+
+		const float speed = 10.0f;
+		Math::Vector3f direction(0.0f, 0.0f, 0.0f);
+		using Key = Core::KeyListenersKeeper::Key;
+		Math::Vector3f forward = Core::g_MainCamera->GetViewDir();
+		Math::Vector3f right = Math::Vector3f(0.0f, 1.0f, 0.0f).CrossProduct(forward);
+
+		if (is_key_pressed[Key::D])
+		{
+			direction = direction + right;
+		}
+
+		if (is_key_pressed[Key::A])
+		{
+			direction = direction - right;
+		}
+
+		if (is_key_pressed[Key::W])
+		{
+			direction = direction + forward;
+		}
+
+		if (is_key_pressed[Key::S])
+		{
+			direction = direction - forward;
+		}
+
+		Math::Vector3f offset = direction * dt * speed;
+		Core::g_MainCamera->GetViewDir();
+		Math::Vector3f pos = Core::g_MainCamera->GetPosition();
+		Core::g_MainCamera->SetPosition(pos + offset);
 	}
 }

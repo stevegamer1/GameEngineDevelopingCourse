@@ -4,6 +4,7 @@
 #include <Constants.h>
 #include <Window/IWindow.h>
 #include <Window.h>
+#include <Window/KeyListenersKeeper.h>
 
 namespace GameEngine::Core
 {
@@ -45,5 +46,48 @@ namespace GameEngine::Core
         }
 
         window->SetMousePos(x, y);
+    }
+
+    void OnKeyDown(WPARAM wParam, LPARAM lParam)
+    {
+        const LPARAM IS_EVENT_REPEATED_BIT = 1 << 30;
+        if (lParam & IS_EVENT_REPEATED_BIT) {
+          return;
+        }
+
+        WPARAM key = wParam;
+        switch (key) {
+        case 'W':
+            KeyListenersKeeper::CallDownListeners(KeyListenersKeeper::Key::W);
+            break;
+        case 'A':
+            KeyListenersKeeper::CallDownListeners(KeyListenersKeeper::Key::A);
+            break;
+        case 'S':
+            KeyListenersKeeper::CallDownListeners(KeyListenersKeeper::Key::S);
+            break;
+        case 'D':
+            KeyListenersKeeper::CallDownListeners(KeyListenersKeeper::Key::D);
+            break;
+        }
+    }
+
+    void OnKeyUp(WPARAM wParam, LPARAM lParam)
+    {
+        WPARAM key = wParam;
+        switch (key) {
+        case 'W':
+            KeyListenersKeeper::CallUpListeners(KeyListenersKeeper::Key::W);
+            break;
+        case 'A':
+            KeyListenersKeeper::CallUpListeners(KeyListenersKeeper::Key::A);
+            break;
+        case 'S':
+            KeyListenersKeeper::CallUpListeners(KeyListenersKeeper::Key::S);
+            break;
+        case 'D':
+            KeyListenersKeeper::CallUpListeners(KeyListenersKeeper::Key::D);
+            break;
+        }
     }
 }
