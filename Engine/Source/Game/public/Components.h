@@ -5,6 +5,7 @@
 namespace GameEngine {
 	// Base of all components.
 	struct Component {
+		virtual const std::type_info& GetConcreteComponentTypeID() const = 0;
 		virtual ~Component(){}
 	};
 
@@ -15,6 +16,8 @@ namespace GameEngine {
 		Math::Vector3f velocity;
 		float leftBound;
 		float rightBound;
+
+		const std::type_info& GetConcreteComponentTypeID() const override;
 	};
 
 	// Jump on the ground.
@@ -22,6 +25,8 @@ namespace GameEngine {
 	public:
 		PhysicsComponent(Math::Vector3f);
 		Math::Vector3f velocity;
+
+		const std::type_info& GetConcreteComponentTypeID() const override;
 	};
 
 	// Be controlled by input.
@@ -29,5 +34,7 @@ namespace GameEngine {
 	public:
 		ControllableComponent();
 		Math::Vector3f accumulatedInput;
+
+		const std::type_info& GetConcreteComponentTypeID() const override;
 	};
 }

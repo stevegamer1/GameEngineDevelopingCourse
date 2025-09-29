@@ -27,8 +27,10 @@ namespace GameEngine
 		std::function<bool()> PlatformLoop = nullptr;
 
 	private:
+		using System = std::function<void(Game&, GameObject&, float)>;
+
 		Core::Timer m_GameTimer;
 		std::vector<GameObject*> m_Objects;
-		std::vector<std::function<void(Game&, GameObject&, float)>> m_Systems;
+		std::vector<System> m_Systems;
 	};
 }
