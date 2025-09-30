@@ -47,7 +47,7 @@ namespace GameEngine
 		// Movement system.
 		m_Systems.push_back([](Game& game, GameObject& obj,  float dt) {
 			for (Component* comp : obj.components) {
-				if (comp->GetConcreteComponentTypeID() == typeid(MovementComponent)) {
+				if (comp->GetConcreteComponentTypeID() == MovementComponent::ConcreteType) {
 					MovementComponent* movement = static_cast<MovementComponent*>(comp);
 
 					obj.SetPosition(obj.GetPosition() + movement->velocity * dt, game.m_renderThread->GetMainFrame());
@@ -66,7 +66,7 @@ namespace GameEngine
 		// Physics system.
 		m_Systems.push_back([](Game& game, GameObject& obj, float dt) {
 			for (Component* comp : obj.components) {
-				if (comp->GetConcreteComponentTypeID() == typeid(PhysicsComponent)) {
+				if (comp->GetConcreteComponentTypeID() == PhysicsComponent::ConcreteType) {
 					PhysicsComponent* physics = static_cast<PhysicsComponent*>(comp);
 					Math::Vector3 gravity = Math::Vector3f(0.0f, -2.0f, 0.0f);
 
@@ -91,8 +91,8 @@ namespace GameEngine
 		// Controlled movement system.
 		m_Systems.push_back([](Game& game, GameObject& obj, float dt) {
 			for (Component* comp : obj.components) {
-				if (comp->GetConcreteComponentTypeID() == typeid(ControllableComponent)) {
-					ControllableComponent* control = dynamic_cast<ControllableComponent*>(comp);
+				if (comp->GetConcreteComponentTypeID() == ControllableComponent::ConcreteType) {
+					ControllableComponent* control = static_cast<ControllableComponent*>(comp);
 					obj.SetPosition(obj.GetPosition() + control->accumulatedInput * dt, game.m_renderThread->GetMainFrame());
 					control->accumulatedInput = Math::Vector3f::Zero();
 				}

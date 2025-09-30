@@ -16,15 +16,19 @@ namespace GameEngine {
 		Core::g_InputHandler->RegisterCallback("GoRight", [&]() { accumulatedInput.x += 1.0f; });
 	}
 
-	const std::type_info& MovementComponent::GetConcreteComponentTypeID() const {
-		return typeid(MovementComponent);
+	const std::type_index& MovementComponent::GetConcreteComponentTypeID() const {
+		return ConcreteType;
 	}
 
-	const std::type_info& PhysicsComponent::GetConcreteComponentTypeID() const {
-		return typeid(PhysicsComponent);
+	const std::type_index& PhysicsComponent::GetConcreteComponentTypeID() const {
+		return ConcreteType;
 	}
 
-	const std::type_info& ControllableComponent::GetConcreteComponentTypeID() const {
-		return typeid(ControllableComponent);
+	const std::type_index& ControllableComponent::GetConcreteComponentTypeID() const {
+		return ConcreteType;
 	}
+
+	const std::type_index MovementComponent::ConcreteType = typeid(MovementComponent);
+	const std::type_index PhysicsComponent::ConcreteType = typeid(PhysicsComponent);
+	const std::type_index ControllableComponent::ConcreteType = typeid(ControllableComponent);
 }
