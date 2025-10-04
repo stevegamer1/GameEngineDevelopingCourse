@@ -7,13 +7,18 @@ namespace GameEngine {
 	// Base of all components.
 	struct Component {
 		enum class Type {
-			MovementComponent = 0,
-			PhysicsComponent = 1,
-			ControllableComponent = 2
+			Invalid = 0,
+			MovementComponent = 1,
+			PhysicsComponent = 2,
+			ControllableComponent = 3
 		};
+	protected:
+		Type ConcreteComponentType = Type::Invalid;
+	public:
 
-		virtual Component::Type GetConcreteComponentType() const = 0;
-		virtual ~Component(){}
+		Component(Type concreteType);
+		Type GetType() const;
+		virtual ~Component() = default;
 	};
 
 	// Move back and forth.
@@ -23,25 +28,21 @@ namespace GameEngine {
 		Math::Vector3f velocity;
 		float leftBound;
 		float rightBound;
-
-		Component::Type GetConcreteComponentType() const override;
 	};
 
 	// Jump on the ground.
 	class PhysicsComponent : public Component {
 	public:
+		const Type ConcreteComponentType = Type::PhysicsComponent;
 		PhysicsComponent(Math::Vector3f);
 		Math::Vector3f velocity;
-
-		Component::Type GetConcreteComponentType() const override;
 	};
 
 	// Be controlled by input.
 	class ControllableComponent : public Component {
 	public:
+		const Type ConcreteComponentType = Type::ControllableComponent;
 		ControllableComponent();
 		Math::Vector3f accumulatedInput;
-
-		Component::Type GetConcreteComponentType() const override;
 	};
 }
