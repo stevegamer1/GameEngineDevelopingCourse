@@ -2,7 +2,6 @@
 
 #include <flecs.h>
 #include <Vector.h>
-#include <Timer.h>
 
 struct Position
 {
@@ -38,15 +37,6 @@ struct FrictionAmount
 {
 	float value;
 };
-
-struct DieOnTimerAfterBounce {
-	GameEngine::Core::Timer timer;
-	float death_time;
-};
-
-struct KillOnTouch {};
-
-struct KilledOnTouch {};
 
 using Speed = float;
 

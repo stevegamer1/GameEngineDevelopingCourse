@@ -55,7 +55,6 @@ namespace GameEngine::Core
 			}
 			return 0;
 		case WM_LBUTTONUP:
-			wParam |= MK_LBUTTON;
 		case WM_RBUTTONUP:
 		case WM_MBUTTONUP:
 			if (g_MainWindowsApplication->IsFocused()) [[likely]]
