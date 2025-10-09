@@ -44,9 +44,9 @@ struct DieOnTimerAfterBounce {
 	float death_time;
 };
 
-struct KillOnTouch { bool iHateYou = true; /*just don't touch this field, empty structs are prohibited*/ };
+struct KillOnTouch {};
 
-struct KilledOnTouch { bool iHateMyself = true; /*just don't touch this field, empty structs are prohibited*/ };
+struct KilledOnTouch {};
 
 using Speed = float;
 
