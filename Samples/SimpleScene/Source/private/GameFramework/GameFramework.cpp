@@ -38,7 +38,8 @@ void GameFramework::Init()
 		.set(Bounciness{ 1.f })
 		.set(GeometryPtr{ RenderCore::DefaultGeometry::Cube() })
 		.set(RenderObjectPtr{ new Render::RenderObject() })
-		.set(KillableByTouch{1.0f});
+		.set(KillableByTouch{1.0f})
+		.set(BulletsBonusOnKillByTouch{10});
 
 	flecs::entity camera = m_World.entity()
 		.set(Position{ Math::Vector3f(0.0f, 12.0f, -10.0f) })

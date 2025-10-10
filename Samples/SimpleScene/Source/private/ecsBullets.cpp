@@ -108,18 +108,35 @@ void RegisterEcsBulletSystems(flecs::world& world)
 				}
 			});
 
+	flecs::query_builder<Position, const KillableByTouch> killableQueryBuilder =
+		world.query_builder<Position, const KillableByTouch>();
+	flecs::query<Position, const KillableByTouch> killableQuery = killableQueryBuilder.build();
+
+	flecs::query_builder<BulletShooter> shooterQueryBuilder =
+		world.query_builder<BulletShooter>();
+	flecs::query<BulletShooter> shooterQuery = shooterQueryBuilder.build();
+
 	world.system<Position, KillOnTouch>()
-		.each([&](flecs::entity e, Position& position, const KillOnTouch& killer)
+		.each([&world, killableQuery, shooterQuery](flecs::entity e, Position& position, const KillOnTouch& killer)
 			{
-				/*flecs::query<Position, const Velocity> q =
-					world.query<Position, const Velocity>();*/
-				//world.query<Position>();
-				//.each([](Position& victim_position)
-				//	{
-				//		/*if ((position.value - victim_position.value).GetLength() < (killer.radius + killable.radius)) {
-				//			victim_position.value = Vector3f{ 99999.0f, 999999.0f, 999999.0f };
-				//			v_e.remove<KillableByTouch>();
-				//		}*/
-				//	});
+				int bulletsToAdd = 0;
+
+				killableQuery.each([&position, &killer, &bulletsToAdd]
+					(flecs::entity v_e, Position& victim_position, const KillableByTouch& killable)
+					{
+						if ((position.value - victim_position.value).GetLength() < (killer.radius + killable.radius)) {
+							victim_position.value = Vector3f{ 99999.0f, 999999.0f, 999999.0f };
+							v_e.remove<KillableByTouch>();
+
+							if (v_e.has<BulletsBonusOnKillByTouch>()) {
+								bulletsToAdd += v_e.get<BulletsBonusOnKillByTouch>()->bullets_amount;
+							}
+						}
+					});
+
+				shooterQuery.each([bulletsToAdd](BulletShooter& shooter) {
+						shooter.bullets_left += bulletsToAdd;
+						// shooter.bullets_left = std::max(shooter.bullets_left, shooter.bullets_max);  // Should bonus override this?
+					});
 			});
 }
